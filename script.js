@@ -34,7 +34,11 @@ const gameBoard = (() => {
 // ==========================================
 
 function createPlayer(name, marker) {
-    return {name, marker};
+    let score = 0;
+    const getScore = () => score;
+    const givePoint = () => score++;
+
+    return {name, marker, getScore, givePoint};
 };
 
 const playerOne = createPlayer("X", "X");
@@ -92,7 +96,10 @@ const game = (() => {
         const currentPlayer = getCurrentPlayer();
         gameBoard.addMark(cell, currentPlayer.marker);
 
-        if (checkWin(currentPlayer)) return {message: `${currentPlayer.name} wins!`, gameOver: true};
+        if (checkWin(currentPlayer)) {
+            currentPlayer.givePoint();
+            return {message: `${currentPlayer.name} wins!`, gameOver: true};
+        };
 
         if (checkTie()) return {message: "It's a tie!", gameOver: true};
 
@@ -111,11 +118,17 @@ const display = (() => {
 
     const status = document.querySelector(".status");
     const boardContainer = document.querySelector(".gameboard");
-    const playerOne = document.querySelector(".playerone");
-    const playerTwo = document.querySelector(".playertwo");
+    const scoreOne = document.getElementById("scoreone");
+    const scoreTwo = document.getElementById("scoretwo");
     const resetButton = document.getElementById("reset");
 
     status.textContent = game.getCurrentPlayer().name + " starts!";
+    const updateStatus = (msg) => status.textContent = msg;
+
+    const updateScore = () => {
+        scoreOne.textContent = playerOne.getScore();
+        scoreTwo.textContent = playerTwo.getScore();
+    };
 
     const createBoard = () => {
         const board = gameBoard.getBoard();
@@ -135,6 +148,7 @@ const display = (() => {
         status.textContent = result.message;
         gameOver = result.gameOver;
         updateBoard();
+        updateScore();
     };
 
     const updateBoard = () => {
@@ -144,8 +158,6 @@ const display = (() => {
             cell.textContent = board[i];
         });
     };
-
-    createBoard();
     
     resetButton.addEventListener("click", () => {
         gameBoard.resetBoard();
@@ -154,7 +166,8 @@ const display = (() => {
         status.textContent = game.getCurrentPlayer().name + " starts!";
     });
 
-    const updateStatus = (msg) => status.textContent = msg;
+    createBoard();
+    updateScore();
 
     return {updateStatus};
 
