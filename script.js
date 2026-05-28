@@ -8,12 +8,12 @@
 // ==========================================
 
 const gameBoard = (() => {
-    const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const board = ["", "", "", "", "", "", "", "", ""];
 
     const getBoard = () => board;
 
     const addMark = (cell, marker) => {
-        if (board[cell] !== 0) {
+        if (board[cell] !== "") {
             return;
         } else {
             board[cell] = marker;
@@ -22,7 +22,7 @@ const gameBoard = (() => {
 
     const resetBoard = () => { 
         for (let i = 0; i < board.length; i++) {
-            board[i] = 0;
+            board[i] = "";
         }
     };
 
@@ -44,15 +44,14 @@ const playerTwo = createPlayer("O", "O");
 // ==========================================
 
 const game = (() => {
-    const board = gameBoard.getBoard();
-    console.log(board);
-
     const getCurrentPlayer = () => {
-        const moves = board.filter(cell => cell === 0).length;
+        const board = gameBoard.getBoard();
+        const moves = board.filter(cell => cell !== "").length;
         return moves % 2 === 0 ? playerOne : playerTwo;
     };
 
-    const checkWin = () => {
+    const checkWin = (currentPlayer) => {
+        const board = gameBoard.getBoard();
         const winningPatterns = [
             board[0] + board[1] + board[2],
             board[3] + board[4] + board[5],
@@ -64,21 +63,24 @@ const game = (() => {
             board[2] + board[4] + board[6],
         ];
 
-        for (pattern of winningPatterns) {
-                if (pattern === getCurrentPlayer().marker + getCurrentPlayer().marker + getCurrentPlayer().marker) {
+        for (const pattern of winningPatterns) {
+                if (pattern === currentPlayer.marker + currentPlayer.marker + currentPlayer.marker) {
                     return true;
                 }
             } return false;
         };
 
     const checkTie = () => {
-        return board.every(cell => cell !== 0);
+        const board = gameBoard.getBoard();
+        return board.every(cell => cell !== "");
     };
 
-    const playRound = () => {
-        gameBoard.addMark(cell, getCurrentPlayer().marker);
+    const playRound = (cell) => {
+        const currentPlayer = getCurrentPlayer();
+        gameBoard.addMark(cell, currentPlayer.marker);
+        console.log(gameBoard.getBoard());
 
-        if (checkWin()) return `${getCurrentPlayer().name} wins!`
+        if (checkWin(currentPlayer)) return `${currentPlayer.name} wins!`
 
         if (checkTie()) return "it's a tie!";
 
@@ -91,4 +93,8 @@ const game = (() => {
 
 })();
 
-game.playRound(0);
+console.log(game.playRound(0))
+console.log(game.playRound(3))
+console.log(game.playRound(1))
+console.log(game.playRound(4))
+console.log(game.playRound(2))
