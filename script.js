@@ -100,6 +100,9 @@ const display = (() => {
     const boardContainer = document.querySelector(".gameboard");
     const playerOne = document.querySelector(".playerone");
     const playerTwo = document.querySelector(".playertwo");
+    const resetButton = document.getElementById("reset");
+
+    status.textContent = game.getCurrentPlayer().name + " starts!";
 
     const createBoard = () => {
         const board = gameBoard.getBoard();
@@ -130,8 +133,13 @@ const display = (() => {
     };
 
     createBoard();
-
-    status.textContent = game.getCurrentPlayer().name + "'s turn";
+    
+    resetButton.addEventListener("click", () => {
+        gameBoard.resetBoard();
+        gameOver = false;
+        updateBoard();
+        status.textContent = game.getCurrentPlayer().name + " starts!";
+    });
 
 });
 
