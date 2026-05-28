@@ -79,27 +79,24 @@ const game = (() => {
         const currentPlayer = getCurrentPlayer();
         gameBoard.addMark(cell, currentPlayer.marker);
 
-        if (checkWin(currentPlayer)) return `${currentPlayer.name} wins!`
+        if (checkWin(currentPlayer)) return {message: `${currentPlayer.name} wins!`, gameOver: true};
 
-        if (checkTie()) return "it's a tie!";
+        if (checkTie()) return {message: "It's a tie!", gameOver: true};
 
-        getCurrentPlayer();
-
-        return `${getCurrentPlayer().name}'s turn`
+        return {message: `${getCurrentPlayer().name}'s turn`, gameOver: false};
     };
 
     return {getCurrentPlayer, playRound};
 
 })();
 
-console.log(game.playRound(0))
-console.log(game.playRound(3))
-console.log(game.playRound(1))
-console.log(game.playRound(4))
-console.log(game.playRound(2))
+// 3. DISPLAY MODULE
+// ==========================================
 
 const display = (() => {
-    const turn = document.querySelector(".turn");
+    let gameOver = false;
+
+    const status = document.querySelector(".status");
     const boardContainer = document.querySelector(".gameboard");
     const playerOne = document.querySelector(".playerone");
     const playerTwo = document.querySelector(".playertwo");
@@ -109,13 +106,33 @@ const display = (() => {
         for (let i = 0; i < board.length; i++) {
             const cell = document.createElement("div");
             cell.classList.add("cell");
-            cell.textContent = board[i];
+            cell.dataset.index = i;
+            cell.addEventListener("click", updateCell);
             boardContainer.appendChild(cell);
         }
     };
 
+    const updateCell = (e) => {
+        if (gameOver) return;
+        const clickedCell = e.target.dataset.index;
+        const result = game.playRound(clickedCell);
+        status.textContent = result.message;
+        gameOver = result.gameOver;
+        updateBoard();
+    };
+
+    const updateBoard = () => {
+        const board = gameBoard.getBoard();
+        const cells = document.querySelectorAll(".cell");
+        cells.forEach((cell, i) => {
+            cell.textContent = board[i];
+        });
+    };
+
     createBoard();
 
-})
+    status.textContent = game.getCurrentPlayer().name + "'s turn";
+
+});
 
 display();
