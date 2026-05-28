@@ -30,7 +30,7 @@ const gameBoard = (() => {
     
 })();
 
-// 2. PLAYER FACTORY
+// 2. PLAYER FACTORY + INPUT NAME
 // ==========================================
 
 function createPlayer(name, marker) {
@@ -39,6 +39,19 @@ function createPlayer(name, marker) {
 
 const playerOne = createPlayer("X", "X");
 const playerTwo = createPlayer("O", "O");
+
+const nameOne = document.getElementById("playerone");
+const nameTwo = document.getElementById("playertwo");
+
+nameOne.addEventListener("input", () => {
+    playerOne.name = nameOne.value;
+    if (gameBoard.getBoard().every(cell => cell === ""))
+    display.updateStatus(`${game.getCurrentPlayer().name} starts!`);
+})
+
+nameTwo.addEventListener("input", () => {
+    playerTwo.name = nameTwo.value;
+})
 
 // 3. GAME FLOW MODULE
 // ==========================================
@@ -141,6 +154,10 @@ const display = (() => {
         status.textContent = game.getCurrentPlayer().name + " starts!";
     });
 
-});
+    const updateStatus = (msg) => status.textContent = msg;
+
+    return {updateStatus};
+
+})();
 
 display();
