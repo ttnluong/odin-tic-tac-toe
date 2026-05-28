@@ -1,16 +1,22 @@
+/* board
+    [0][1][2]  
+    [3][4][5]
+    [6][7][8]
+*/
+
 // 1. GAME BOARD MODULE
 // ==========================================
 
-const gameBoard = () => {
+const gameBoard = (() => {
     const board = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     const getBoard = () => board;
 
-    const addMark = (index, marker) => {
-        if (board[index] !== 0) {
+    const addMark = (cell, marker) => {
+        if (board[cell] !== 0) {
             return;
         } else {
-            board[index] = marker;
+            board[cell] = marker;
         }
     };
 
@@ -22,7 +28,7 @@ const gameBoard = () => {
 
     return {getBoard, addMark, resetBoard};
     
-};
+})();
 
 // 2. PLAYER FACTORY
 // ==========================================
@@ -34,56 +40,55 @@ function createPlayer(name, marker) {
 const playerOne = createPlayer("X", "X");
 const playerTwo = createPlayer("O", "O");
 
-// 3. GAME CONTROLLER MODULE
+// 3. GAME FLOW MODULE
 // ==========================================
 
-function flowGame() {
+const game = (() => {
+    const board = gameBoard.getBoard();
+    console.log(board);
 
-    const players = [
-        {playeOne},
-        {playerTwo},
-    ];
-
-    let currentPlayer = players[0];
-    const emptyCells = board.filter(item => item === 0).length;
-    const switchPlayer = () => {
-        if (emtpyCells % 2 === 1) {
-        currentPlayer = players[0];
-        } else {
-        currentPlayer = players[1];
-        };
+    const getCurrentPlayer = () => {
+        const moves = board.filter(cell => cell === 0).length;
+        return moves % 2 === 0 ? playerOne : playerTwo;
     };
 
-    const getCurrentPlayer = () => currentPlayer;
+    const checkWin = () => {
+        const winningPatterns = [
+            board[0] + board[1] + board[2],
+            board[3] + board[4] + board[5],
+            board[6] + board[7] + board[8],
+            board[0] + board[3] + board[6],
+            board[1] + board[4] + board[7],
+            board[2] + board[5] + board[8],
+            board[0] + board[4] + board[8],
+            board[2] + board[4] + board[6],
+        ];
+
+        for (pattern of winningPatterns) {
+                if (pattern === getCurrentPlayer().marker + getCurrentPlayer().marker + getCurrentPlayer().marker) {
+                    return true;
+                }
+            } return false;
+        };
+
+    const checkTie = () => {
+        return board.every(cell => cell !== 0);
+    };
 
     const playRound = () => {
-        board.addMark(index, getCurrentPlayer.marker);
+        gameBoard.addMark(cell, getCurrentPlayer().marker);
+
+        if (checkWin()) return `${getCurrentPlayer().name} wins!`
+
+        if (checkTie()) return "it's a tie!";
+
+        getCurrentPlayer();
+
+        return `${getCurrentPlayer().name}'s turn`
     };
-};
 
-/* board
-    [0][1][2]  
-    [3][4][5]
-    [6][7][8]
-*/
+    return {getCurrentPlayer, playRound};
 
-function checkWin(currentPlayer) {
-    const winningPatterns = [
-        board[0] + board[1] + board[2],
-        board[3] + board[4] + board[5],
-        board[6] + board[7] + board[8],
-        board[0] + board[3] + board[6],
-        board[1] + board[4] + board[7],
-        board[2] + board[5] + board[8],
-        board[0] + board[4] + board[8],
-        board[2] + board[4] + board[6],
-    ];
+})();
 
-    for (pattern of winningPatterns) {
-        if (pattern === currentPlayer.marker + currentPlayer.marker + currentPlayer.marker) {
-            return true;
-        } else {
-            return false;
-        };
-    };
-};
+game.playRound(0);
