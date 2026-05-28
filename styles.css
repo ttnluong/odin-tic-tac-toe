@@ -1,0 +1,14 @@
+.gameboard {
+    width: 400px;
+    height: 400px;
+    display: grid;
+    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+}
+
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid red;
+}

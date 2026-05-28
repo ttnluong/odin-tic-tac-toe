@@ -78,7 +78,6 @@ const game = (() => {
     const playRound = (cell) => {
         const currentPlayer = getCurrentPlayer();
         gameBoard.addMark(cell, currentPlayer.marker);
-        console.log(gameBoard.getBoard());
 
         if (checkWin(currentPlayer)) return `${currentPlayer.name} wins!`
 
@@ -98,3 +97,25 @@ console.log(game.playRound(3))
 console.log(game.playRound(1))
 console.log(game.playRound(4))
 console.log(game.playRound(2))
+
+const display = (() => {
+    const turn = document.querySelector(".turn");
+    const boardContainer = document.querySelector(".gameboard");
+    const playerOne = document.querySelector(".playerone");
+    const playerTwo = document.querySelector(".playertwo");
+
+    const createBoard = () => {
+        const board = gameBoard.getBoard();
+        for (let i = 0; i < board.length; i++) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            cell.textContent = board[i];
+            boardContainer.appendChild(cell);
+        }
+    };
+
+    createBoard();
+
+})
+
+display();
