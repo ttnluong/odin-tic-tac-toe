@@ -34,7 +34,6 @@ const gameBoard = (() => {
 // ==========================================
 
 function createPlayer(name, marker) {
-    let isComputer = false;
     let score = 0;
     const getScore = () => score;
     const givePoint = () => score++;
@@ -114,7 +113,7 @@ const game = (() => {
 
 })();
 
-// 3. DISPLAY MODULE
+// 4. DISPLAY MODULE
 // ==========================================
 
 const display = (() => {
@@ -184,3 +183,8 @@ const display = (() => {
 })();
 
 display();
+
+// 5. TO DO LIST
+// ==========================================
+
+// add compputer player
