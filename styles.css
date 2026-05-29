@@ -1,6 +1,50 @@
+/* VARIABLES
+====================================================== */
+
+:root { 
+    --c-grey: hsl(204, 4%, 76%);
+    --c-cyan: hsl(183 81 35%);
+    --c-blue: hsl(195 67 30%);
+    --c-blue-light: hsl(195 20 95%);
+    --c-indigo: hsl(238 35 19%);
+    --c-purple: hsl(254 29 35%);
+    --c-yellow: hsl(40 100 67%);
+}
+
+/* NORMALISE
+====================================================== */
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+input, button {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+/* PAGE LAYOUT
+====================================================== */
+
+body {
+    height: 100vh;
+    font-family: "Martian Mono", sans-serif;
+    font-size: 1rem;
+    color: var(--c-purple);
+    background-color: var(--c-blue-light);
+}
+
 .container {
+    height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 50px;
 }
@@ -12,22 +56,104 @@
     gap: 100px;
 }
 
+h1 {
+    font-family: "Tourney";
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+/* GAMEBOARD
+====================================================== */
+
+.status {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--c-cyan);
+}
+
 .gameboard {
     width: 400px;
     height: 400px;
     display: grid;
-    grid-template: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+    gap: 2px;
 }
 
 .cell {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
+    font-family: "Tourney";
+    font-size: 4rem;
+    border-radius: 10px;
+    background-color: var(--c-grey);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
+
+.cell:hover {
+    background-color: color-mix(in hsl shorter hue, var(--c-grey), black 10%);
+}
+
+/* PLAYERS
+====================================================== */
 
 .player {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 16px;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+.name {
+    width: 140px;
+    padding: 6px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--c-blue);
+    border: 2px solid var(--c-yellow);
+    background-color: transparent;
+    transition: all 0.15s ease-in-out;
+}
+
+.name::placeholder {
+    color: hsl(0 4% 70%);
+}
+
+.name:hover {
+    border: 2px solid var(--c-blue);
+}
+
+.name:focus {
+    outline: none;
+    border: 2px solid var(--c-blue);
+}
+
+.score {
+    font-size: 1.5rem;
+    padding: 10px 18px;
+    border-radius: 4px;
+    border: 2px solid var(--c-cyan);
+    color: var(--c-blue);
+}
+
+/* RESET BUTTON
+====================================================== */
+
+button {
+    padding: 6px 14px;
+    font-weight: 600;
+    border: 2px solid var(--c-purple);
+    background-color: var(--c-yellow);
+    color: var(--c-purple);
+    transition: all 0.15s ease-in-out;
+}
+
+button:hover {
+    background-color: var(--c-blue);
+    color: var(--c-blue-light);
 }
