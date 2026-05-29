@@ -95,6 +95,11 @@ h1 {
     background-color: color-mix(in hsl shorter hue, var(--c-grey), black 10%);
 }
 
+.cell.winner {
+    background-color: var(--c-cyan);
+    color: var(--c-blue-light);
+}
+
 /* PLAYERS
 ====================================================== */
 

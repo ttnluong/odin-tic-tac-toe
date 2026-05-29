@@ -34,6 +34,7 @@ const gameBoard = (() => {
 // ==========================================
 
 function createPlayer(name, marker) {
+    let isComputer = false;
     let score = 0;
     const getScore = () => score;
     const givePoint = () => score++;
@@ -70,22 +71,24 @@ const game = (() => {
     const checkWin = (currentPlayer) => {
         const board = gameBoard.getBoard();
         const winningPatterns = [
-            board[0] + board[1] + board[2],
-            board[3] + board[4] + board[5],
-            board[6] + board[7] + board[8],
-            board[0] + board[3] + board[6],
-            board[1] + board[4] + board[7],
-            board[2] + board[5] + board[8],
-            board[0] + board[4] + board[8],
-            board[2] + board[4] + board[6],
+            [0,1,2],
+            [3,4,5],
+            [6,7,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [0,4,8],
+            [2,4,6]
         ];
 
         for (const pattern of winningPatterns) {
-                if (pattern === currentPlayer.marker + currentPlayer.marker + currentPlayer.marker) {
-                    return true;
-                }
-            } return false;
-        };
+            const [a,b,c] = pattern;
+            if (board[a] === currentPlayer.marker && board[b] === currentPlayer.marker && board[c] === currentPlayer.marker) {
+                return pattern;  // return pattern for cell highlighting
+            }
+        }
+        return null;
+    };
 
     const checkTie = () => {
         const board = gameBoard.getBoard();
@@ -95,10 +98,11 @@ const game = (() => {
     const playRound = (cell) => {
         const currentPlayer = getCurrentPlayer();
         gameBoard.addMark(cell, currentPlayer.marker);
+        const win = checkWin(currentPlayer); // gets winning pattern
 
-        if (checkWin(currentPlayer)) {
+        if (win) {
             currentPlayer.givePoint();
-            return {message: `${currentPlayer.name} wins!`, gameOver: true};
+            return {message: `${currentPlayer.name} wins!`, gameOver: true, winningCells: win};
         };
 
         if (checkTie()) return {message: "It's a tie!", gameOver: true};
@@ -147,6 +151,11 @@ const display = (() => {
         const result = game.playRound(clickedCell);
         status.textContent = result.message;
         gameOver = result.gameOver;
+        if (result.winningCells) {
+            result.winningCells.forEach(i => {
+            document.querySelectorAll(".cell")[i].classList.add("winner");
+        });
+}
         updateBoard();
         updateScore();
     };
@@ -162,6 +171,7 @@ const display = (() => {
     resetButton.addEventListener("click", () => {
         gameBoard.resetBoard();
         gameOver = false;
+        document.querySelectorAll(".winner").forEach(cell => cell.classList.remove("winner"));
         updateBoard();
         status.textContent = game.getCurrentPlayer().name + " starts!";
     });
