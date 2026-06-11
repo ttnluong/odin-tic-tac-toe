@@ -10,7 +10,7 @@ A classic Tic Tac Toe game built as part of The Odin Project JavaScript curricul
 
 - Two-player gameplay in the browser
 - Players can enter their names before starting
-- Clickable game board — marks are placed by clicking squares
+- Clickable game board, marks are placed by clicking squares
 - Prevents overwriting already-taken squares
 - Detects all win conditions (rows, columns, diagonals) and ties
 - Displays the result when the game ends
@@ -24,7 +24,7 @@ A classic Tic Tac Toe game built as part of The Odin Project JavaScript curricul
 
 ## Concepts Practiced
 
-- **Factory functions** for creating Player and Gameboard objects
-- **Module pattern (IIFE)** to encapsulate single-instance objects (e.g. `Gameboard`, `DisplayController`)
-- Minimal global scope — nearly all logic lives inside objects
+- **Factory functions** for creating Player objects
+- **Module pattern (IIFE)** to encapsulate single-instance objects
+- Minimal global scope, nearly all logic lives inside objects
 - Separation of concerns: game logic vs. DOM/display logic
